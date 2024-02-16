@@ -7,6 +7,7 @@ from uuid import UUID
 import json
 import os
 
+
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                  'basemodel test not supported')
 class test_basemodel(unittest.TestCase):
@@ -39,19 +40,19 @@ class test_basemodel(unittest.TestCase):
             self.assertNotIsInstance(self.value(), Base)
 
     def test_default(self):
-        """ est method to check if instances are of the correct type."""
+        """ test method to check if instances are of the correct type."""
         i = self.value()
         self.assertEqual(type(i), self.value)
 
     def test_kwargs(self):
-        """ Test method to check if instances can be created from a dictionary."""
+        """ check if instances can be created from a dictionary."""
         i = self.value()
         copy = i.to_dict()
         new = BaseModel(**copy)
         self.assertFalse(new is i)
 
     def test_kwargs_int(self):
-        """Test method to check if instances handle invalid dictionary values."""
+        """check if instances handle invalid dictionary values."""
         i = self.value()
         copy = i.to_dict()
         copy.update({1: 2})
