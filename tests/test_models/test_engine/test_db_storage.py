@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-''' Unit tests for the DBStorage class in the
-    context of the User class.'''
+''' module for file_storage tests '''
 import unittest
 import MySQLdb
 from models.user import User
@@ -12,9 +11,9 @@ import os
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
                  'db_storage test not supported')
 class TestDBStorage(unittest.TestCase):
-    '''Test cases for the DBStorage class in the context of the User class.'''
+    '''testing dbstorage engine'''
     def test_new_and_save(self):
-        '''Test the new and save methods.'''
+        '''testing  the new and save methods'''
         db = MySQLdb.connect(user=os.getenv('HBNB_MYSQL_USER'),
                              host=os.getenv('HBNB_MYSQL_HOST'),
                              passwd=os.getenv('HBNB_MYSQL_PWD'),
@@ -24,10 +23,10 @@ class TestDBStorage(unittest.TestCase):
                            'last_name': 'bond',
                            'email': 'jack@bond.com',
                            'password': 12345})
-        c = db.cursor()
-        c.execute('SELECT COUNT(*) FROM users')
-        old_count = cu.fetchall()
-        c.close()
+        cur = db.cursor()
+        cur.execute('SELECT COUNT(*) FROM users')
+        old_count = cur.fetchall()
+        cur.close()
         db.close()
         new_user.save()
         db = MySQLdb.connect(user=os.getenv('HBNB_MYSQL_USER'),
@@ -35,15 +34,15 @@ class TestDBStorage(unittest.TestCase):
                              passwd=os.getenv('HBNB_MYSQL_PWD'),
                              port=3306,
                              db=os.getenv('HBNB_MYSQL_DB'))
-        c = db.cursor()
-        c.execute('SELECT COUNT(*) FROM users')
-        new_count = c.fetchall()
+        cur = db.cursor()
+        cur.execute('SELECT COUNT(*) FROM users')
+        new_count = cur.fetchall()
         self.assertEqual(new_count[0][0], old_count[0][0] + 1)
-        c.close()
+        cur.close()
         db.close()
 
-    def test_creating_new_user(self):
-        """  Test creating a new user."""
+    def test_new(self):
+        """ New object is correctly added to database """
         new = User(
             email='john2020@gmail.com',
             password='password',
@@ -62,24 +61,24 @@ class TestDBStorage(unittest.TestCase):
         )
         cursor = dbc.cursor()
         cursor.execute('SELECT * FROM users WHERE id="{}"'.format(new.id))
-        res = cursor.fetchone()
-        self.assertTrue(res is not None)
-        self.assertIn('john2020@gmail.com', res)
-        self.assertIn('password', res)
-        self.assertIn('John', res)
-        self.assertIn('Zoldyck', res)
+        result = cursor.fetchone()
+        self.assertTrue(result is not None)
+        self.assertIn('john2020@gmail.com', result)
+        self.assertIn('password', result)
+        self.assertIn('John', result)
+        self.assertIn('Zoldyck', result)
         cursor.close()
         dbc.close()
 
-    def test_delete_user(self):
-        """  Test deleting a user."""
+    def test_delete(self):
+        """ Object is correctly deleted from database """
         new = User(
             email='john2020@gmail.com',
             password='password',
             first_name='John',
             last_name='Zoldyck'
         )
-        o_k = 'User.{}'.format(new.id)
+        obj_key = 'User.{}'.format(new.id)
         dbc = MySQLdb.connect(
             host=os.getenv('HBNB_MYSQL_HOST'),
             port=3306,
@@ -91,20 +90,20 @@ class TestDBStorage(unittest.TestCase):
         self.assertTrue(new in storage.all().values())
         cursor = dbc.cursor()
         cursor.execute('SELECT * FROM users WHERE id="{}"'.format(new.id))
-        res = cursor.fetchone()
-        self.assertTrue(res is not None)
-        self.assertIn('john2020@gmail.com', res)
-        self.assertIn('password', res)
-        self.assertIn('John', res)
-        self.assertIn('Zoldyck', res)
-        self.assertIn(o_k, storage.all(User).keys())
+        result = cursor.fetchone()
+        self.assertTrue(result is not None)
+        self.assertIn('john2020@gmail.com', result)
+        self.assertIn('password', result)
+        self.assertIn('John', result)
+        self.assertIn('Zoldyck', result)
+        self.assertIn(obj_key, storage.all(User).keys())
         new.delete()
-        self.assertNotIn(o_k, storage.all(User).keys())
+        self.assertNotIn(obj_key, storage.all(User).keys())
         cursor.close()
         dbc.close()
 
-    def test_reload_data_from_database(self):
-        """  Test reloading data from the database."""
+    def test_reload(self):
+        """ Tests the reloading of the database session """
         dbc = MySQLdb.connect(
             host=os.getenv('HBNB_MYSQL_HOST'),
             port=3306,
@@ -133,8 +132,8 @@ class TestDBStorage(unittest.TestCase):
         cursor.close()
         dbc.close()
 
-    def test_saving_a_user(self):
-        """  Test saving a user."""
+    def test_save(self):
+        """ object is successfully saved to database """
         new = User(
             email='john2020@gmail.com',
             password='password',
@@ -150,10 +149,10 @@ class TestDBStorage(unittest.TestCase):
         )
         cursor = dbc.cursor()
         cursor.execute('SELECT * FROM users WHERE id="{}"'.format(new.id))
-        res = cursor.fetchone()
+        result = cursor.fetchone()
         cursor.execute('SELECT COUNT(*) FROM users;')
         old_cnt = cursor.fetchone()[0]
-        self.assertTrue(res is None)
+        self.assertTrue(result is None)
         self.assertFalse(new in storage.all().values())
         new.save()
         dbc1 = MySQLdb.connect(
@@ -163,15 +162,15 @@ class TestDBStorage(unittest.TestCase):
             passwd=os.getenv('HBNB_MYSQL_PWD'),
             db=os.getenv('HBNB_MYSQL_DB')
         )
-        cur2 = dbc1.cursor()
-        cur2.execute('SELECT * FROM users WHERE id="{}"'.format(new.id))
-        res = cur2.fetchone()
-        cur2.execute('SELECT COUNT(*) FROM users;')
-        new_cnt = cur2.fetchone()[0]
-        self.assertFalse(res is None)
+        cursor1 = dbc1.cursor()
+        cursor1.execute('SELECT * FROM users WHERE id="{}"'.format(new.id))
+        result = cursor1.fetchone()
+        cursor1.execute('SELECT COUNT(*) FROM users;')
+        new_cnt = cursor1.fetchone()[0]
+        self.assertFalse(result is None)
         self.assertEqual(old_cnt + 1, new_cnt)
         self.assertTrue(new in storage.all().values())
-        cur2.close()
+        cursor1.close()
         dbc1.close()
         cursor.close()
         dbc.close()
