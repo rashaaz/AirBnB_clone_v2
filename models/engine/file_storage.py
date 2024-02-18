@@ -59,8 +59,8 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        ''' deletes the object obj from the attribute
-            __objects if it's inside it
+        ''' Deletes the specified object from the internal storage
+            __obj: The object to be deleted from the internal storage
         '''
         if obj is None:
             return
