@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-''' module for file_storage tests '''
+''' Unit tests for the DBStorage class '''
 import unittest
 import MySQLdb
 from models.user import User
@@ -11,9 +11,9 @@ import os
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
                  'db_storage test not supported')
 class TestDBStorage(unittest.TestCase):
-    '''testing dbstorage engine'''
+    '''Test cases for the DBStorage class in the context of the User class.'''
     def test_new_and_save(self):
-        '''testing  the new and save methods'''
+        '''Test the new and save methods.'''
         db = MySQLdb.connect(user=os.getenv('HBNB_MYSQL_USER'),
                              host=os.getenv('HBNB_MYSQL_HOST'),
                              passwd=os.getenv('HBNB_MYSQL_PWD'),
@@ -42,7 +42,7 @@ class TestDBStorage(unittest.TestCase):
         db.close()
 
     def test_new(self):
-        """ New object is correctly added to database """
+        """ Test creating a new user. """
         new = User(
             email='john2020@gmail.com',
             password='password',
@@ -71,7 +71,7 @@ class TestDBStorage(unittest.TestCase):
         dbc.close()
 
     def test_delete(self):
-        """ Object is correctly deleted from database """
+        """ Test deleting a user. """
         new = User(
             email='john2020@gmail.com',
             password='password',
@@ -103,7 +103,7 @@ class TestDBStorage(unittest.TestCase):
         dbc.close()
 
     def test_reload(self):
-        """ Tests the reloading of the database session """
+        """ Test reloading data from the database. """
         dbc = MySQLdb.connect(
             host=os.getenv('HBNB_MYSQL_HOST'),
             port=3306,
@@ -133,7 +133,7 @@ class TestDBStorage(unittest.TestCase):
         dbc.close()
 
     def test_save(self):
-        """ object is successfully saved to database """
+        """ Test saving a user. """
         new = User(
             email='john2020@gmail.com',
             password='password',
