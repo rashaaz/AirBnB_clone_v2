@@ -10,27 +10,27 @@ import os
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                  'basemodel test not supported')
 class test_basemodel(unittest.TestCase):
-    """ test class for base_model class"""
+    """ Test class for the BaseModel class in the HBNB project."""
 
     def __init__(self, *args, **kwargs):
-        """ init the test class of basemodel"""
+        """ Initialize the BaseModel."""
         super().__init__(*args, **kwargs)
         self.name = 'BaseModel'
         self.value = BaseModel
 
     def setUp(self):
-        """ the set up method of the test class"""
+        """ Set up method to prepare for each test case."""
         pass
 
     def tearDown(self):
-        """the teardown method of the ctest class"""
+        """Tear down method to clean up after each test case."""
         try:
             os.remove('file.json')
         except Exception:
             pass
 
     def test_init(self):
-        """Tests the initialization of the model class.
+        """Test method to ensure proper initialization of instances.
         """
         self.assertIsInstance(self.value(), BaseModel)
         if self.value is not BaseModel:
@@ -39,19 +39,19 @@ class test_basemodel(unittest.TestCase):
             self.assertNotIsInstance(self.value(), Base)
 
     def test_default(self):
-        """ default testing of basemodel"""
+        """ test method to check if instances are of the correct type."""
         i = self.value()
         self.assertEqual(type(i), self.value)
 
     def test_kwargs(self):
-        """ testing basemodel with kwargs"""
+        """ check if instances can be created from a dictionary."""
         i = self.value()
         copy = i.to_dict()
         new = BaseModel(**copy)
         self.assertFalse(new is i)
 
     def test_kwargs_int(self):
-        """ testing with kwargs again but with int kwargs"""
+        """ check if instances handle invalid dictionary values."""
         i = self.value()
         copy = i.to_dict()
         copy.update({1: 2})
@@ -59,7 +59,7 @@ class test_basemodel(unittest.TestCase):
             new = BaseModel(**copy)
 
     def test_save(self):
-        """ Testing save metthod"""
+        """ Test method to check if instances are saved correctly."""
         i = self.value()
         i.save()
         key = self.name + "." + i.id
@@ -68,13 +68,13 @@ class test_basemodel(unittest.TestCase):
             self.assertEqual(j[key], i.to_dict())
 
     def test_str(self):
-        """ testing the str method of themodel"""
+        """ Test method to check the string representation of instances."""
         i = self.value()
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
                          i.__dict__))
 
     def test_todict(self):
-        """ testing the to_dict method"""
+        """ Test method to check the to_dict() method."""
         i = self.value()
         n = i.to_dict()
         self.assertEqual(i.to_dict(), n)
