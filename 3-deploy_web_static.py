@@ -7,7 +7,7 @@ from datetime import datetime
 from fabric.api import env, local, put, run, runs_once
 
 
-env.hosts = ['54.86.220.207', '54.175.137.217']
+env.hosts = ['100.26.230.116', '18.233.65.185']
 
 
 @runs_once
@@ -39,19 +39,19 @@ def do_deploy(archive_path):
     """
     if not os.path.exists(archive_path):
         return False
-    file_name = os.path.basename(archive_path)
-    folder_name = file_name.replace(".tgz", "")
-    folder_path = "/data/web_static/releases/{}/".format(folder_name)
+    fi_n = os.path.basename(archive_path)
+    fol_n = fi_n.replace(".tgz", "")
+    fol_p = "/data/web_static/releases/{}/".format(fol_n)
     suc = False
     try:
-        put(archive_path, "/tmp/{}".format(file_name))
-        run("mkdir -p {}".format(folder_path))
-        run("tar -xzf /tmp/{} -C {}".format(file_name, folder_path))
-        run("rm -rf /tmp/{}".format(file_name))
-        run("mv {}web_static/* {}".format(folder_path, folder_path))
-        run("rm -rf {}web_static".format(folder_path))
+        put(archive_path, "/tmp/{}".format(fi_n))
+        run("mkdir -p {}".format(fol_p))
+        run("tar -xzf /tmp/{} -C {}".format(fi_n, fol_p))
+        run("rm -rf /tmp/{}".format(fi_n))
+        run("mv {}web_static/* {}".format(fol_p, fol_p))
+        run("rm -rf {}web_static".format(fol_p))
         run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(folder_path))
+        run("ln -s {} /data/web_static/current".format(fol_p))
         print('New version is now LIVE!')
         suc = True
     except Exception:
