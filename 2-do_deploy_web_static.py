@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""Compress web static package
+"""
+Fabric script that distributes an archive to your web servers
 """
 from fabric.api import *
 from datetime import datetime
@@ -12,7 +13,7 @@ env.key_filename = '~/.ssh/school'
 
 
 def do_deploy(archive_path):
-    """Deploy web files to server
+    """Distributes an archive to your web servers
     """
     try:
         if not (path.exists(archive_path)):
