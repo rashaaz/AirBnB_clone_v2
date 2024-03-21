@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBNB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../styles/3-header.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='../styles/4-common.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='../styles/6-filters.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='../styles/8-places.css') }}" type="text/css">
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <ul class="nav__list">
+                <li class="nav__item"><a href="#">Places</a></li>
+                <li class="nav__item"><a href="#">Reviews</a></li>
+                <li class="nav__item"><a href="#">My Profile</a></li>
+                <li class="nav__item"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+        <h1 class="header__title">HBNB</h1>
+    </header>
+    <section class="filters">
+        <div class="filters__title">Filters</div>
+        <div class="filters__content">
+            <div class="filters__section">
+                <h3 class="filters__title">States</h3>
+                <div class="filters__body">
+                    {% for state in states %}
+                    <label class="filter" for="state_{{ state.id }}">
+                        <input type="checkbox" name="state" id="state_{{ state.id }}">
+                        <span>{{ state.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="filters__section">
+                <h3 class="filters__title">Amenities</h3>
+                <div class="filters__body">
+                    {% for amenity in amenities %}
+                    <label class="filter" for="amenity_{{ amenity.id }}">
+                        <input type="checkbox" name="amenity" id="amenity_{{ amenity.id }}">
+                        <span>{{ amenity.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="places">
+        <article class="place">
+            <div class="place__name">PLACE NAME</div>
+            <div class="place__price_by_night">$PRICE</div>
+            <div class="place__information">
+                <div class="place__max_guest">Max Guest $GUEST_NUMBER</div>
+                <div class="place__number_rooms">Number Rooms $NUMBER_ROOMS</div>
+                <div class="place__number_bathrooms">Number Bathrooms $NUMBER_BATHROOMS</div>
+            </div>
+            <div class="place__description">PLACE DESCRIPTION</div>
+        </article>
+        <!-- Additional place articles go here -->
+    </section>
+    <footer class="footer">
+        <p class="footer__description">Footer description</p>
+    </footer>
+</body>
+</html>
